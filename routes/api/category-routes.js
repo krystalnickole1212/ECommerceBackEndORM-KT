@@ -1,15 +1,35 @@
 const router = require('express').Router();
+const res = require('express/lib/response');
 const { Category, Product } = require('../../models');
 
 // The `/api/categories` endpoint
 
-router.get('/', (req, res) => {
-  // find all categories
-  // be sure to include its associated Products
-});
+router
+  .get('/', (req, res) => {
+    // find all categories
+    Category.findAll({
+      // be sure to include its associated Products
+      attributes: ['id', 'category_name'],
+      include: [
+        {
+          model: Product,
+          attributes: ['id', ' product_name', 'price', 'stock'],
+        },
+      ],
+    });
+  })
+  .then((dbCategoryData) => res.json(dbCategoryData))
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
+  });
+
 
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
+  Category.findOne({
+    where,
+  });
   // be sure to include its associated Products
 });
 
